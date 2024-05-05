@@ -1,0 +1,57 @@
+﻿@page "/articles"
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <p>@_errorMessage</p>
+}
+else if (!_hasLoaded)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm FormName="Add Article" Model="@_form" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <MudGrid>
+            <MudItem xs="4">
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="Article id"
+                                      @bind-Value="_form.ArticleId" />
+                        <MudTextField Label="Description" Class="mt-3"
+                                      @bind-Value="_form.Description" />
+                        <MudTextField Label="Price" Class="mt-3"
+                                      @bind-Value="_form.Price" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+
+
+    <MudTable Style="width:50%;" Items="@_articles" Dense="true" Striped="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Articles</MudText>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Article id</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Price</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.ArticleId</MudTd>
+            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="Price">@context.Price</MudTd>
+            <MudTd>
+                <MudIconButton OnClick="@(() => DeleteCustomerById(context.ArticleId))" Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}

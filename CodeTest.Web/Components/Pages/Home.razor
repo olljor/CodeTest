@@ -1,0 +1,86 @@
+﻿@page "/"
+@using Services
+
+<MudText Typo="Typo.h2">Code Test</MudText>
+<MudText Typo="Typo.h5">This is your code test, the web page is a blazor serverside application built in .Net Core 8.</MudText>
+
+<MudList>
+    <MudListItem Icon="@Icons.Material.Outlined.ArrowRight">
+        <MudText Typo="Typo.subtitle2">It has an SQLite database which can be communicated with via the API</MudText>
+    </MudListItem>
+    <MudListItem Icon="@Icons.Material.Outlined.ArrowRight">
+        <MudText Typo="Typo.subtitle2">The API uses dapper to query the database</MudText>
+    </MudListItem>
+    <MudListItem Icon="@Icons.Material.Outlined.ArrowRight">
+        <MudText Typo="Typo.subtitle2">
+            The application uses MudBlazor for front-end UI components, you can find the documentation
+            <MudLink Href="https://mudblazor.com/docs/overview" Target="_blank">here</MudLink>
+        </MudText>
+    </MudListItem>
+    <MudListItem Icon="@Icons.Material.Outlined.ArrowRight">
+        <MudText Typo="Typo.subtitle2">You will find that Articles and Customers pages, services, api calls and database querys are already implimented, use them to figure out how complete the test</MudText>
+    </MudListItem>
+    <MudListItem Icon="@Icons.Material.Outlined.ArrowRight">
+        <MudText Typo="Typo.subtitle2">Your task is to impliment the missing page, service, api calls and database querys for Orders</MudText>
+    </MudListItem>
+
+</MudList>
+
+<MudText Typo="Typo.h6">Good luck!</MudText>
+
+<div style="display:flex; flex-direction:row; justify-content:start;">
+
+    <MudButton Disabled="@_loading" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.InstallDesktop" OnClick="RunDatabaseSetupScript">
+        @if (_loading)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Processing</MudText>
+        }
+        else
+        {
+            <MudText>Setup Database</MudText>
+        }
+    </MudButton>
+
+</div>
+
+@if (_setupDone)
+{
+    <MudText Color="Color.Success">Setup complete</MudText>
+}
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <MudText Color="Color.Error">@_errorMessage</MudText>
+}
+
+@code
+{
+    [Inject]
+    public SetupService SetupService { get; set; }
+
+    private string _errorMessage = "";
+    private bool _loading = false;
+    private bool _setupDone = false;
+
+    public async Task RunDatabaseSetupScript()
+    {
+        try
+        {
+            _loading = true;
+            await SetupService.RunDatabaseSetupScript();
+            _setupDone = true;
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+
+        _loading = false;
+    }
+}
+
+
+
+
+

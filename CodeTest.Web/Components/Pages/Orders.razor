@@ -1,0 +1,104 @@
+﻿@page "/orders"
+
+@using System.ComponentModel.DataAnnotations
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <p>@_errorMessage</p>
+}
+else if (!_hasLoaded)
+{
+    <p><em>Loading...</em></p>
+
+}
+else
+{
+    <MudText Typo="Typo.h6">Add New Orders</MudText>
+    <EditForm FormName="Add Order" Model="@_addOrderForm" OnValidSubmit="OnValidAddOrder">
+        <DataAnnotationsValidator />
+        <MudGrid>
+            <MudItem xs="4">
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="Customer number"
+                                      @bind-Value="_addOrderForm.CustomerNumber" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+
+    <MudContainer Style="padding-top: 50px;"> </MudContainer>
+
+    <MudText Typo="Typo.h6">Search For Orders</MudText>
+    <EditForm FormName="Add Order" Model="@_searchOrderForm" OnValidSubmit="OnValidSearchOrder">
+        <DataAnnotationsValidator />
+        <MudGrid>
+            <MudItem xs="4">
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="Order Id"
+                                      @bind-Value="_searchOrderForm.OrderId" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Search</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+    <MudText Typo="Typo.h6">@_searchedObjective </MudText>
+
+    <MudContainer Style="padding-top: 50px;"> </MudContainer>
+
+    <MudTable Style="width:50%;" Items="@_orders" Dense="true" Striped="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Orders</MudText>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Order Id</MudTh>
+            <MudTh>Customer number</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.OrderId</MudTd>
+            <MudTd DataLabel="Description">@context.CustomerNumber</MudTd>
+            <MudTd>
+                <MudIconButton OnClick="@(() => DeleteOrderById(context.OrderId))" Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+
+    <MudContainer Style="padding-top: 50px;"> </MudContainer>
+
+    <MudTable Style="width:50%;" Items="@_orderRows" Dense="true" Striped="true">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Order Rows</MudText>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Order Id</MudTh>
+            <MudTh>Article Id</MudTh>
+            <MudTh>Amount</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Order Id">@context.OrderId</MudTd>
+            <MudTd DataLabel="Article Id">@context.ArticleId</MudTd>
+            <MudTd DataLabel="Amount">@context.Amount</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+
+
